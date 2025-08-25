@@ -8,15 +8,15 @@
     :root {
       --bg: #0f1117;
       --panel: #161a22;
-      --stone-base: #4b4033;
+      --stone-base: #5b4a3a;
       --stone-dark: #2e261d;
-      --stone-light: #6e5a44;
-      --stone-glow1: rgba(255, 215, 64, 0.7);
-      --stone-glow2: rgba(255, 215, 64, 0.4);
-      --stone-glow3: rgba(255, 215, 64, 0.2);
+      --stone-light: #8a735d;
       --stone-gold-core: #ffe082;
       --stone-gold-mid: #ffd54f;
       --stone-gold-edge: #f9a825;
+      --stone-glow1: rgba(255, 215, 64, 0.8);
+      --stone-glow2: rgba(255, 215, 64, 0.45);
+      --stone-glow3: rgba(255, 215, 64, 0.25);
       --explode: #ff5722;
     }
 
@@ -55,53 +55,61 @@
     }
 
     .stone {
-      width: clamp(42px, 6vw, 66px);
+      width: clamp(44px, 6vw, 70px);
       aspect-ratio: 1 / 1;
-      border-radius: 45% 55% 50% 60% / 60% 50% 55% 45%; /* grillige vorm */
+      border-radius: 40% 60% 55% 45% / 55% 50% 45% 60%;
       background: radial-gradient(circle at 35% 35%, var(--stone-light) 0%, var(--stone-base) 60%, var(--stone-dark) 100%);
-      border: 1px solid rgba(0,0,0,0.5);
-      box-shadow: inset -3px -3px 6px rgba(0,0,0,0.5), inset 2px 2px 4px rgba(255,255,255,0.05);
+      border: 1px solid rgba(0,0,0,0.6);
+      box-shadow: inset -3px -3px 6px rgba(0,0,0,0.55), inset 2px 2px 4px rgba(255,255,255,0.08);
       position: relative;
       overflow: hidden;
       transition: background 220ms ease, box-shadow 220ms ease, transform 0.3s ease;
     }
 
-    /* subtiele korrel textuur */
+    .stone:nth-child(3n) { border-radius: 60% 40% 50% 70% / 50% 60% 40% 50%; }
+    .stone:nth-child(4n) { border-radius: 55% 45% 65% 35% / 45% 65% 35% 55%; }
+    .stone:nth-child(5n) { border-radius: 70% 30% 60% 40% / 60% 40% 70% 30%; }
+
+    /* kleurvariaties */
+    .stone:nth-child(6n) { background: radial-gradient(circle at 35% 35%, #7a664f 0%, #4d3e2f 60%, #241e16 100%); }
+    .stone:nth-child(7n) { background: radial-gradient(circle at 35% 35%, #927b63 0%, #5a4937 60%, #2a2218 100%); }
+    .stone:nth-child(8n) { background: radial-gradient(circle at 35% 35%, #6c5a46 0%, #3d3125 60%, #1f1913 100%); }
+
     .stone::before {
       content: "";
       position: absolute;
       inset: 0;
-      background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
-      background-size: 4px 4px;
+      background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+                        radial-gradient(rgba(0,0,0,0.1) 1px, transparent 1px);
+      background-size: 4px 4px, 6px 6px;
       mix-blend-mode: overlay;
-      opacity: 0.35;
+      opacity: 0.4;
     }
 
-    /* Highlight glans */
     .stone::after {
       content: "";
       position: absolute;
-      top: 20%;
-      left: 20%;
-      width: 38%;
-      height: 28%;
+      top: 18%;
+      left: 18%;
+      width: 42%;
+      height: 32%;
       border-radius: 50%;
-      background: rgba(255,255,255,0.15);
-      filter: blur(4px);
+      background: rgba(255,255,255,0.18);
+      filter: blur(5px);
       transform: rotate(-20deg);
     }
 
     .stone.on {
       background: radial-gradient(circle at 35% 35%, var(--stone-gold-core) 0%, var(--stone-gold-mid) 50%, var(--stone-gold-edge) 100%);
       box-shadow:
-        0 0 12px 3px var(--stone-glow1),
-        0 0 26px 12px var(--stone-glow2),
-        0 0 50px 20px var(--stone-glow3);
+        0 0 14px 3px var(--stone-glow1),
+        0 0 28px 14px var(--stone-glow2),
+        0 0 56px 22px var(--stone-glow3);
     }
 
     .stone.explode {
       background: radial-gradient(circle at 30% 30%, #fff 0%, var(--explode) 40%, #000 100%);
-      transform: scale(1.7) rotate(25deg);
+      transform: scale(1.8) rotate(30deg);
       opacity: 0;
       transition: transform 0.6s ease, opacity 0.8s ease;
     }
@@ -133,13 +141,13 @@
 </head>
 <body>
   <div class="wrap">
-    <h1>Kei goed gedaan! Weer een dossier afgerond.</h1>
-    <div class="subtitle">Er zijn al 5 dossiers afgerond door het bijstandsteam.</div>
+    <h1>Keigoed, weer meerdere dossiers afgerond!</h1>
+    <div class="subtitle">Het bijstandsteam heeft al 60 dossiers afgerond!</div>
 
     <div class="panel">
       <div class="controls">
         <button id="restart" aria-label="Herstart cyclus">Herstart</button>
-        <span class="status" visable="false" id="status">Status: klaar voor start…</span>
+        <span class="status" id="status">Status: klaar voor start…</span>
       </div>
       <div id="grid" class="grid" aria-label="Raster met 160 keien" role="grid"></div>
     </div>
@@ -147,8 +155,8 @@
 
   <script>
     const TOTAL_BULBS = 160;
-    const TARGET_LIT = 5;
-    const STEP_MS = 2000;
+    const TARGET_LIT = 60;
+    const STEP_MS = 200;
     const PAUSE_AFTER_FILLED_MS = 5000;
 
     const grid = document.getElementById('grid');
