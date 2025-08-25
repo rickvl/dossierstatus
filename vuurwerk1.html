@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Keigoed gedaan!</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --panel: #161a22;
+      --stone-base: #5b4a3a;
+      --stone-dark: #2e261d;
+      --stone-light: #8a735d;
+      --stone-gold-core: #ffe082;
+      --stone-gold-mid: #ffd54f;
+      --stone-gold-edge: #f9a825;
+      --stone-glow1: rgba(255, 215, 64, 0.8);
+      --stone-glow2: rgba(255, 215, 64, 0.45);
+      --stone-glow3: rgba(255, 215, 64, 0.25);
+      --explode: #ff5722;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: radial-gradient(1200px 800px at 50% -20%, #1b2030 0%, var(--bg) 50%);
+      color: #e6e8ef;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      display: grid;
+      place-items: center;
+    }
+
+    .wrap {
+      width: min(1100px, 92vw);
+    }
+
+    h1 { font-size: clamp(18px, 2.6vw, 28px); margin: 18px 0 14px; font-weight: 700; letter-spacing: 0.2px; }
+    .subtitle { opacity: 0.8; margin-bottom: 18px; font-size: clamp(12px, 1.6vw, 14px); }
+
+    .panel {
+      background: linear-gradient(180deg, #151923, var(--panel));
+      border: 1px solid #222838;
+      border-radius: 20px;
+      padding: clamp(14px, 2.5vw, 22px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(16, minmax(34px, 1fr));
+      gap: clamp(10px, 1.4vw, 16px);
+      justify-items: center;
+      align-items: center;
+    }
+
+    .stone {
+      width: clamp(44px, 6vw, 70px);
+      aspect-ratio: 1 / 1;
+      border-radius: 40% 60% 55% 45% / 55% 50% 45% 60%;
+      background: radial-gradient(circle at 35% 35%, var(--stone-light) 0%, var(--stone-base) 60%, var(--stone-dark) 100%);
+      border: 1px solid rgba(0,0,0,0.6);
+      box-shadow: inset -3px -3px 6px rgba(0,0,0,0.55), inset 2px 2px 4px rgba(255,255,255,0.08);
+      position: relative;
+      overflow: hidden;
+      transition: background 220ms ease, box-shadow 220ms ease, transform 0.3s ease;
+    }
+
+    .stone:nth-child(3n) { border-radius: 60% 40% 50% 70% / 50% 60% 40% 50%; }
+    .stone:nth-child(4n) { border-radius: 55% 45% 65% 35% / 45% 65% 35% 55%; }
+    .stone:nth-child(5n) { border-radius: 70% 30% 60% 40% / 60% 40% 70% 30%; }
+
+    /* kleurvariaties */
+    .stone:nth-child(6n) { background: radial-gradient(circle at 35% 35%, #7a664f 0%, #4d3e2f 60%, #241e16 100%); }
+    .stone:nth-child(7n) { background: radial-gradient(circle at 35% 35%, #927b63 0%, #5a4937 60%, #2a2218 100%); }
+    .stone:nth-child(8n) { background: radial-gradient(circle at 35% 35%, #6c5a46 0%, #3d3125 60%, #1f1913 100%); }
+
+    .stone::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+                        radial-gradient(rgba(0,0,0,0.1) 1px, transparent 1px);
+      background-size: 4px 4px, 6px 6px;
+      mix-blend-mode: overlay;
+      opacity: 0.4;
+    }
+
+    .stone::after {
+      content: "";
+      position: absolute;
+      top: 18%;
+      left: 18%;
+      width: 42%;
+      height: 32%;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      filter: blur(5px);
+      transform: rotate(-20deg);
+    }
+
+    .stone.on {
+      background: radial-gradient(circle at 35% 35%, var(--stone-gold-core) 0%, var(--stone-gold-mid) 50%, var(--stone-gold-edge) 100%);
+      box-shadow:
+        0 0 14px 3px var(--stone-glow1),
+        0 0 28px 14px var(--stone-glow2),
+        0 0 56px 22px var(--stone-glow3);
+    }
+
+    .stone.explode {
+      background: radial-gradient(circle at 30% 30%, #fff 0%, var(--explode) 40%, #000 100%);
+      transform: scale(1.8) rotate(30deg);
+      opacity: 0;
+      transition: transform 0.6s ease, opacity 0.8s ease;
+    }
+
+    .controls {
+      display: flex; gap: 10px; align-items: center; margin-bottom: 14px; flex-wrap: wrap;
+    }
+
+    button {
+      background: #1f2432;
+      color: #e6e8ef;
+      border: 1px solid #2a3042;
+      border-radius: 12px;
+      padding: 8px 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+      transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+    }
+    button:hover { transform: translateY(-1px); background: #22283a; border-color: #3a4158; }
+    button:active { transform: translateY(0); }
+
+    .status { opacity: 0.85; font-size: 14px; }
+
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: repeat(10, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Keigoed, 160 dossiers afgerond door het bijstandsteam!</h1>
+    <div class="panel">
+        <video width="1000" controls autoplay loop>
+          <source src="160-1.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+    </div>
+  </div>
+</body>
+</html>
