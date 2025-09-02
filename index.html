@@ -3,20 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Keigoed gedaan!</title>
+  <title>Duim omhoog!</title>
   <style>
     :root {
       --bg: #0f1117;
       --panel: #161a22;
-      --stone-base: #5b4a3a;
-      --stone-dark: #2e261d;
-      --stone-light: #8a735d;
-      --stone-gold-core: #ffe082;
-      --stone-gold-mid: #ffd54f;
-      --stone-gold-edge: #f9a825;
-      --stone-glow1: rgba(255, 215, 64, 0.8);
-      --stone-glow2: rgba(255, 215, 64, 0.45);
-      --stone-glow3: rgba(255, 215, 64, 0.25);
+      --glow1: rgba(255, 215, 64, 0.8);
+      --glow2: rgba(255, 215, 64, 0.45);
+      --glow3: rgba(255, 215, 64, 0.25);
       --explode: #ff5722;
     }
 
@@ -55,60 +49,19 @@
     }
 
     .stone {
-      width: clamp(44px, 6vw, 70px);
-      aspect-ratio: 1 / 1;
-      border-radius: 40% 60% 55% 45% / 55% 50% 45% 60%;
-      background: radial-gradient(circle at 35% 35%, var(--stone-light) 0%, var(--stone-base) 60%, var(--stone-dark) 100%);
-      border: 1px solid rgba(0,0,0,0.6);
-      box-shadow: inset -3px -3px 6px rgba(0,0,0,0.55), inset 2px 2px 4px rgba(255,255,255,0.08);
-      position: relative;
-      overflow: hidden;
-      transition: background 220ms ease, box-shadow 220ms ease, transform 0.3s ease;
-    }
-
-    .stone:nth-child(3n) { border-radius: 60% 40% 50% 70% / 50% 60% 40% 50%; }
-    .stone:nth-child(4n) { border-radius: 55% 45% 65% 35% / 45% 65% 35% 55%; }
-    .stone:nth-child(5n) { border-radius: 70% 30% 60% 40% / 60% 40% 70% 30%; }
-
-    /* kleurvariaties */
-    .stone:nth-child(6n) { background: radial-gradient(circle at 35% 35%, #7a664f 0%, #4d3e2f 60%, #241e16 100%); }
-    .stone:nth-child(7n) { background: radial-gradient(circle at 35% 35%, #927b63 0%, #5a4937 60%, #2a2218 100%); }
-    .stone:nth-child(8n) { background: radial-gradient(circle at 35% 35%, #6c5a46 0%, #3d3125 60%, #1f1913 100%); }
-
-    .stone::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-                        radial-gradient(rgba(0,0,0,0.1) 1px, transparent 1px);
-      background-size: 4px 4px, 6px 6px;
-      mix-blend-mode: overlay;
-      opacity: 0.4;
-    }
-
-    .stone::after {
-      content: "";
-      position: absolute;
-      top: 18%;
-      left: 18%;
-      width: 42%;
-      height: 32%;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.18);
-      filter: blur(5px);
-      transform: rotate(-20deg);
+      font-size: clamp(28px, 5vw, 48px);
+      line-height: 1;
+      background: none;
+      border: none;
+      box-shadow: none;
+      transition: transform 0.3s ease, filter 0.3s ease;
     }
 
     .stone.on {
-      background: radial-gradient(circle at 35% 35%, var(--stone-gold-core) 0%, var(--stone-gold-mid) 50%, var(--stone-gold-edge) 100%);
-      box-shadow:
-        0 0 14px 3px var(--stone-glow1),
-        0 0 28px 14px var(--stone-glow2),
-        0 0 56px 22px var(--stone-glow3);
+      filter: drop-shadow(0 0 6px var(--glow1)) drop-shadow(0 0 12px var(--glow2)) drop-shadow(0 0 20px var(--glow3));
     }
 
     .stone.explode {
-      background: radial-gradient(circle at 30% 30%, #fff 0%, var(--explode) 40%, #000 100%);
       transform: scale(1.8) rotate(30deg);
       opacity: 0;
       transition: transform 0.6s ease, opacity 0.8s ease;
@@ -141,22 +94,22 @@
 </head>
 <body>
   <div class="wrap">
-    <h1>Keigoed, weer meerdere dossiers afgerond!</h1>
-    <div class="subtitle">Het bijstandsteam heeft al 60 dossiers afgerond!</div>
+    <h1>Top gedaan, weer meerdere dossiers afgerond! 👍</h1>
+    <div class="subtitle">Het bijstandsteam heeft al 10 dossiers afgerond!</div>
 
     <div class="panel">
       <div class="controls">
         <button id="restart" aria-label="Herstart cyclus">Herstart</button>
         <span class="status" id="status">Status: klaar voor start…</span>
       </div>
-      <div id="grid" class="grid" aria-label="Raster met 160 keien" role="grid"></div>
+      <div id="grid" class="grid" aria-label="Raster met 160 duimpjes" role="grid"></div>
     </div>
   </div>
 
   <script>
     const TOTAL_BULBS = 160;
-    const TARGET_LIT = 60;
-    const STEP_MS = 200;
+    const TARGET_LIT = 10;
+    const STEP_MS = 400;
     const PAUSE_AFTER_FILLED_MS = 5000;
 
     const grid = document.getElementById('grid');
@@ -167,8 +120,9 @@
     for (let i = 0; i < TOTAL_BULBS; i++) {
       const stone = document.createElement('div');
       stone.className = 'stone';
+      stone.textContent = '👍';
       stone.setAttribute('role', 'gridcell');
-      stone.setAttribute('aria-label', `Gouden kei ${i + 1}`);
+      stone.setAttribute('aria-label', `Duimpje ${i + 1}`);
       grid.appendChild(stone);
       stones.push(stone);
     }
@@ -177,7 +131,6 @@
     let pauseTimeout = null;
 
     function setStatus(text) {
-      //statusEl.textContent = text;
       statusEl.textContent = "";
     }
 
@@ -202,11 +155,9 @@
     }
 
     function explodeAll() {
-      setStatus('Alle keien lichten op! 💥 Ze barsten uit elkaar!');
       stones.forEach(s => s.classList.add('explode'));
       setTimeout(() => {
         turnOffAll();
-        setStatus('Alles gereset, opnieuw beginnen…');
         startCycle();
       }, 3000);
     }
@@ -215,7 +166,6 @@
       clearTimers();
       turnOffAll();
       let litCount = 0;
-      setStatus('Cyclus gestart: zet elke 2s een willekeurige kei aan…');
 
       intervalId = setInterval(() => {
         const stone = getRandomOffStone();
@@ -229,14 +179,11 @@
         }
         stone.classList.add('on');
         litCount++;
-        setStatus(`Er licht${litCount === 1 ? 't' : 'en'} nu ${litCount} van de ${TARGET_LIT} keien op…`);
 
         if (litCount >= TARGET_LIT) {
           clearInterval(intervalId);
           intervalId = null;
-          setStatus('Doel bereikt: 5 lichten op. Wachten 5 seconden…');
           pauseTimeout = setTimeout(() => {
-            setStatus('Opnieuw beginnen…');
             startCycle();
           }, PAUSE_AFTER_FILLED_MS);
         }
@@ -245,7 +192,6 @@
 
     window.addEventListener('load', startCycle);
     restartBtn.addEventListener('click', () => {
-      setStatus('Handmatige herstart…');
       startCycle();
     });
   </script>
