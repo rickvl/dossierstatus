@@ -51,14 +51,15 @@
     .stone {
       font-size: clamp(28px, 5vw, 48px);
       line-height: 1;
-      background: none;
-      border: none;
-      box-shadow: none;
-      transition: transform 0.3s ease, filter 0.3s ease;
+      color: rgba(0, 0, 0, 0.1); /* zwart en half transparant */
+      transition: transform 0.3s ease, filter 0.3s ease, color 0.3s ease;
     }
 
     .stone.on {
-      filter: drop-shadow(0 0 6px var(--glow1)) drop-shadow(0 0 12px var(--glow2)) drop-shadow(0 0 20px var(--glow3));
+      color: gold; /* goud wanneer actief */
+      filter: drop-shadow(0 0 6px var(--glow1))
+              drop-shadow(0 0 12px var(--glow2))
+              drop-shadow(0 0 20px var(--glow3));
     }
 
     .stone.explode {
