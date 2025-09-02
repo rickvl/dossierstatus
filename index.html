@@ -86,8 +86,6 @@
     button:hover { transform: translateY(-1px); background: #22283a; border-color: #3a4158; }
     button:active { transform: translateY(0); }
 
-    .status { opacity: 0.85; font-size: 14px; }
-
     @media (max-width: 640px) {
       .grid { grid-template-columns: repeat(10, 1fr); }
     }
@@ -95,13 +93,12 @@
 </head>
 <body>
   <div class="wrap">
-    <h1>Top gedaan, weer meerdere dossiers afgerond! 👍</h1>
-    <div class="subtitle">Het bijstandsteam heeft al 10 dossiers afgerond!</div>
-
+    <!-- <h1>Top gedaan, weer meerdere dossiers afgerond! 👍</h1> -->
+    <h1>Het bijstandsteam is van start gegaan! 👍</h1>
+    <!-- <div class="subtitle">Het bijstandsteam heeft al 10 dossiers afgerond!</div> -->
     <div class="panel">
       <div class="controls">
-        <button id="restart" aria-label="Herstart cyclus">Herstart</button>
-        <span class="status" id="status">Status: klaar voor start…</span>
+        
       </div>
       <div id="grid" class="grid" aria-label="Raster met 160 duimpjes" role="grid"></div>
     </div>
@@ -114,8 +111,6 @@
     const PAUSE_AFTER_FILLED_MS = 5000;
 
     const grid = document.getElementById('grid');
-    const statusEl = document.getElementById('status');
-    const restartBtn = document.getElementById('restart');
 
     const stones = [];
     for (let i = 0; i < TOTAL_BULBS; i++) {
@@ -130,10 +125,6 @@
 
     let intervalId = null;
     let pauseTimeout = null;
-
-    function setStatus(text) {
-      statusEl.textContent = "";
-    }
 
     function turnOffAll() {
       stones.forEach(s => s.classList.remove('on', 'explode'));
@@ -192,9 +183,6 @@
     }
 
     window.addEventListener('load', startCycle);
-    restartBtn.addEventListener('click', () => {
-      startCycle();
-    });
   </script>
 </body>
 </html>
