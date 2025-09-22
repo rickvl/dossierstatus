@@ -94,11 +94,12 @@
 <body>
   <div class="wrap">
     <!-- <h1>Top gedaan, weer meerdere dossiers afgerond! 👍</h1> -->
-    <h1>Het bijstandsteam is van start gegaan! 👍</h1>
-    <!-- <div class="subtitle">Het bijstandsteam heeft al 10 dossiers afgerond!</div> -->
+    <h1>Het bijstandsteam is goed op weg en er zijn al meerdere dossiers ingestuurd naar het OM! 👍</h1>
     <div class="panel">
       <div class="controls">
-        
+        <button id="minus">-</button>
+        <span id="targetDisplay"></span>
+        <button id="plus">+</button>
       </div>
       <div id="grid" class="grid" aria-label="Raster met 160 duimpjes" role="grid"></div>
     </div>
@@ -106,7 +107,7 @@
 
   <script>
     const TOTAL_BULBS = 160;
-    const TARGET_LIT = 10;
+    let TARGET_LIT = parseInt(localStorage.getItem("TARGET_LIT")) || 4;
     const STEP_MS = 400;
     const PAUSE_AFTER_FILLED_MS = 5000;
 
@@ -181,6 +182,25 @@
         }
       }, STEP_MS);
     }
+
+    // plus/min knoppen
+    document.getElementById("targetDisplay").textContent = `Dossiers: ${TARGET_LIT}`;
+
+    document.getElementById("minus").addEventListener("click", () => {
+      if (TARGET_LIT > 1) {
+        TARGET_LIT--;
+        localStorage.setItem("TARGET_LIT", TARGET_LIT);
+        location.reload();
+      }
+    });
+
+    document.getElementById("plus").addEventListener("click", () => {
+      if (TARGET_LIT < TOTAL_BULBS) {
+        TARGET_LIT++;
+        localStorage.setItem("TARGET_LIT", TARGET_LIT);
+        location.reload();
+      }
+    });
 
     window.addEventListener('load', startCycle);
   </script>
